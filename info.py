@@ -85,7 +85,7 @@ else:
 DATA_DATABASE_URL = environ.get('DATA_DATABASE_URL', "mongodb+srv://Fakrudin:fakrudin91056289hay@cluster0.5ilhogs.mongodb.net/?appName=Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Files') 
 FILES_DATABASE_URL = environ.get('FILES_DATABASE_URL', "ongodb+srv://Sukwendar:Sukwendarshing@cluster0.m9fnmdq.mongodb.net/?appName=Cluster0")
-SECOND_FILES_DATABASE_URL = environ.get('SECOND_FILES_DATABASE_URL', "")
+SECOND_FILES_DATABASE_URL = environ.get('SECOND_FILES_DATABASE_URL', "mongodb+srv://Karishmajain:Karishmajain@cluster0.df9pten.mongodb.net/?appName=Cluster0")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 
 if len(DATA_DATABASE_URL) == 0 and len(FILES_DATABASE_URL) == 0:
@@ -103,12 +103,12 @@ if len(SECOND_FILES_DATABASE_URL) == 0:
 
 
 # Links
-SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/Nova_Filter_Official')
-UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/Nova_Filter_Official')
-FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/NovoFlix_Hub')
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/Nova_Filter_Official")
+SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/movies_updet')
+UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/movies_updet')
+FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/Your_Movie_Link_8')
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/how_to_downlod09/9")
 TUTORIAL_NAME = environ.get("TUTORIAL_NAME", "Tutorial")
-VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/Nova_Filter_Official")
+VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/how_to_downlod09/9")
 
 # Bot settings
 TIME_ZONE = environ.get('TIME_ZONE', 'Asia/Colombo') # Replace your time zone
