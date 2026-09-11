@@ -74,7 +74,7 @@ else:
     REQUESTS_CHANNEL = int(REQUESTS_CHANNEL)
 
 # support group
-SUPPORT_GROUP = environ.get('SUPPORT_GROUP', 'https://t.me/Your_Movie_Link_8')
+SUPPORT_GROUP = environ.get('SUPPORT_GROUP', '-1002135122055')
 if len(SUPPORT_GROUP) == 0:
     SUPPORT_GROUP = None
     logger.warning('SUPPORT_GROUP is missing')
@@ -152,7 +152,7 @@ if len(BIN_CHANNEL) == 0:
     exit()
 else:
     BIN_CHANNEL = int(BIN_CHANNEL)
-URL = environ.get("URL", "https://t.me/movies_updet")
+URL = environ.get("URL", "")
 if URL:
     if URL.startswith(('https://', 'http://')):
         if not URL.endswith("/"):
