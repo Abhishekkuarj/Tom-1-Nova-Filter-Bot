@@ -84,7 +84,7 @@ else:
 # MongoDB information
 DATA_DATABASE_URL = environ.get('DATA_DATABASE_URL', "mongodb+srv://Fakrudin:fakrudin91056289hay@cluster0.5ilhogs.mongodb.net/?appName=Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Files') 
-FILES_DATABASE_URL = environ.get('FILES_DATABASE_URL', "ongodb+srv://Sukwendar:Sukwendarshing@cluster0.m9fnmdq.mongodb.net/?appName=Cluster0")
+FILES_DATABASE_URL = environ.get('FILES_DATABASE_URL', "mongodb+srv://Sukwendar:Sukwendarshing@cluster0.m9fnmdq.mongodb.net/?appName=Cluster0")
 SECOND_FILES_DATABASE_URL = environ.get('SECOND_FILES_DATABASE_URL', "mongodb+srv://Karishmajain:Karishmajain@cluster0.df9pten.mongodb.net/?appName=Cluster0")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 
