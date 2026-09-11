@@ -50,7 +50,7 @@ else:
     ADMINS = [int(admins) for admins in ADMINS.split()]
 
 # Channels
-INDEX_CHANNELS = [int(index_channels) if index_channels.startswith("-") else index_channels for index_channels in environ.get('INDEX_CHANNELS', '').split()]
+INDEX_CHANNELS = [int(index_channels) if index_channels.startswith("-1002520793005") else index_channels for index_channels in environ.get('INDEX_CHANNELS', '').split()]
 if len(INDEX_CHANNELS) == 0:
     logger.info('INDEX_CHANNELS is empty')
 LOG_CHANNEL = environ.get('LOG_CHANNEL', '-1002552925944')
@@ -146,7 +146,7 @@ REQUEST_FORCE_SUB_CHANNEL = environ.get('REQUEST_FORCE_SUB_CHANNEL', 'https://t.
 
 # for stream
 IS_STREAM = is_enabled('IS_STREAM', True)
-BIN_CHANNEL = environ.get("BIN_CHANNEL", "https://t.me/movies_updet")
+BIN_CHANNEL = environ.get("BIN_CHANNEL", "-1002520793005")
 if len(BIN_CHANNEL) == 0:
     logger.error('BIN_CHANNEL is missing, exiting now')
     exit()
