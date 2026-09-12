@@ -184,14 +184,6 @@ async def group_search(client, message):
         if not user_id:
             await message.reply("❌ I'm not working for anonymous admin!")
             return
-        if SUPPORT_GROUP and message.chat.id == SUPPORT_GROUP:
-            files = await get_search_results(message.text)
-            if files:
-                btn = [[
-                    InlineKeyboardButton("📍 Here", url=FILMS_LINK)
-                ]]
-                await message.reply_text(f'Total {len(files)} results found in this group', reply_markup=InlineKeyboardMarkup(btn))
-            return
             
         if message.text.startswith("/") or re.findall(r'https?://\S+|www\.\S+|t\.me/\S+|@\w+', message.text):
             return
