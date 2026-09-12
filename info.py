@@ -142,7 +142,7 @@ PM_SEARCH = is_enabled('PM_SEARCH', True)
 
 # bot string settings
 FORCE_SUB_CHANNELS = environ.get('FORCE_SUB_CHANNELS', '')  # For multiple channels, separate channel IDs with spaces. Example: "-100xxxxx -100xxxxx -100xxxxx"
-REQUEST_FORCE_SUB_CHANNEL = environ.get('REQUEST_FORCE_SUB_CHANNEL', 'https://t.me/movies_updet')  # For multiple channels, separate channel IDs with spaces. Example: "-100xxxxx -100xxxxx -100xxxxx"
+REQUEST_FORCE_SUB_CHANNEL = environ.get('REQUEST_FORCE_SUB_CHANNEL', '-1002520793005')  # For multiple channels, separate channel IDs with spaces. Example: "-100xxxxx -100xxxxx -100xxxxx"
 
 # for stream
 IS_STREAM = is_enabled('IS_STREAM', True)
