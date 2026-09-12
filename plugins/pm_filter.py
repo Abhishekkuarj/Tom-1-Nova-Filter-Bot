@@ -11,7 +11,8 @@ from pyrogram.types import ReplyParameters, WebAppInfo, PreCheckoutQuery, Messag
 from pyrogram import Client, filters, enums
 from utils import get_plan_name, handle_next_back, is_premium, get_size, is_subscribed, is_check_admin, get_wish, get_shortlink, get_readable_time, get_poster, get_imdb_suggestions, temp, get_settings, save_group_settings, render_list_page
 from database.users_chats_db import db
-from database.ia_filterdb import delete_files, db_count_documents, second_db_count_documents, get_search_results
+from database.ia_filterdb import delete_files, db_count_documents, second_db_count_documents, get_search_results, get_file_details
+from pyrogram.file_id import FileId
 from plugins.commands import get_grp_stg
 from urllib.parse import quote
 
@@ -169,11 +170,9 @@ async def pm_search(client, message):
         return await message.reply_text('⚠️ PM search was disabled!')
     if not AUTO_FILTER:
         return await message.reply_text('⚠️ Auto filter was disabled!')
-    s = await message.reply(
-        f"<b><i>🔎 `{message.text}` searching...</i></b>",
-        reply_parameters=ReplyParameters(message_id=message.id)
-    )
+    s = await message.reply(f"<b><i>🔎 `{message.text}` searching...</i></b>", reply_parameters=ReplyParameters(message_id=message.id))
     await auto_filter(client, message, s)
+
             
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
@@ -232,7 +231,7 @@ async def next_page(bot, query):
     del_msg = f"\n\n<b>⚠️ this message will be auto delete after <code>{get_readable_time(auto_del_time)}</code> to avoid copyright issues</b>" if settings["auto_delete"] else ''
     files_link = ''
 
-    if settings['links']:
+    if settings['links'] and query.message.chat.type != enums.ChatType.PRIVATE:
         btn = []
         for file_num, file in enumerate(files, start=offset+1):
             files_link += f"""<b>\n\n{file_num}. <a href="https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file['_id']}">[{get_size(file['file_size'])}] {file['file_name']}</a></b>"""
@@ -733,7 +732,65 @@ async def cb_handler(client: Client, query: CallbackQuery):
             user = query.message.from_user.id
         if int(user) != 0 and query.from_user.id != int(user):
             return await query.answer(f"⚠️ Hello {query.from_user.first_name},\nThese results are not for you! Please search for your own movie/series.", show_alert=True)
-        await query.answer(url=f"https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file_id}")
+        
+        if query.message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
+            return await query.answer(url=f"https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file_id}")
+        
+        await query.answer("⚡ Sending file...")
+        files = await get_file_details(file_id)
+        if not files:
+            return await query.message.reply('⚠️ <b>File Not Found!</b>')
+            
+        settings = await get_settings(query.message.chat.id)
+        if settings.get('shortlink') and not await is_premium(query.from_user.id, client):
+            link = await get_shortlink(settings['url'], settings['api'], f"https://t.me/{temp.U_NAME}?start=shortlink_{query.message.chat.id}_{file_id}")
+            btn = [[InlineKeyboardButton("🔗 Get File", url=link)]]
+            return await query.message.reply(f"📁 <b>{files['file_name']}</b>\n\n✨ Click below to get your file:", reply_markup=InlineKeyboardMarkup(btn))
+            
+        CAPTION = settings.get('caption', script.FILE_CAPTION)
+        f_caption = CAPTION.format(
+            file_name=files['file_name'],
+            file_size=get_size(files['file_size']),
+            file_caption=files.get('caption', '')
+        )
+        user_watchlist = await db.get_watchlist(query.from_user.id)
+        user_favorites = await db.get_favorites(query.from_user.id)
+        f_id_str = str(file_id)
+        watch_btn = InlineKeyboardButton("🗑️ Remove Watchlist", callback_data=f"del_watch#{f_id_str}") if f_id_str in user_watchlist else InlineKeyboardButton("🔖 Add Watchlist", callback_data=f"add_watch#{f_id_str}")
+        fav_btn = InlineKeyboardButton("💔 Remove Favorites", callback_data=f"del_fav#{f_id_str}") if f_id_str in user_favorites else InlineKeyboardButton("❤️ Add Favorites", callback_data=f"add_fav#{f_id_str}")
+        if IS_STREAM and URL:
+            btn = [[
+                InlineKeyboardButton("⚡ Watch & Download", callback_data=f"stream#{f_id_str}")
+            ],[
+                watch_btn, fav_btn
+            ],[
+                InlineKeyboardButton("✖️ Close", callback_data="close_data")
+            ]]
+        else:
+            btn = [[
+                watch_btn, fav_btn
+            ],[
+                InlineKeyboardButton("✖️ Close", callback_data="close_data")
+            ]]
+        try:
+            if (FileId.decode(file_id)).file_type == 4:
+                await client.send_video(
+                    chat_id=query.from_user.id,
+                    video=file_id,
+                    caption=f_caption,
+                    reply_markup=InlineKeyboardMarkup(btn),
+                    video_cover=await db.get_video_cover()
+                )
+            else:
+                await client.send_cached_media(
+                    chat_id=query.from_user.id,
+                    file_id=file_id,
+                    caption=f_caption,
+                    protect_content=False,
+                    reply_markup=InlineKeyboardMarkup(btn)
+                )
+        except Exception as e:
+            await query.message.reply(f"❌ <b>Error sending file:</b> <code>{e}</code>")
 
     elif query.data.startswith("get_del_file"):
         ident, group_id, file_id = query.data.split("#")
@@ -1649,7 +1706,7 @@ async def auto_filter(client, msg, s, spoll=False):
     SELECT[key] = {'lang': 'any', 'qual': 'any', 'season': 'any', 'episode': 'any'}
 
     files_link = ""
-    if settings['links']:
+    if settings['links'] and message.chat.type != enums.ChatType.PRIVATE:
         btn = []
         for file_num, file in enumerate(files, start=1):
             files_link += f"""<b>\n\n{file_num}. <a href="https://t.me/{temp.U_NAME}?start=file_{message.chat.id}_{file['_id']}">[{get_size(file['file_size'])}] {file['file_name']}</a></b>"""
