@@ -165,26 +165,15 @@ async def pm_search(client, message):
     if message.text.startswith("/"):
         return
 
-    
     if not PM_SEARCH:
         return await message.reply_text('⚠️ PM search was disabled!')
-    if await is_premium(message.from_user.id, client):
-        if not AUTO_FILTER:
-            return await message.reply_text('⚠️ Auto filter was disabled!')
-        s = await message.reply(f"<b><i>🔎 `{message.text}` searching...</i></b>", reply_parameters=ReplyParameters(message_id=message.id))
-        await auto_filter(client, message, s)
-    else:
-        files = await get_search_results(message.text)
-        total = len(files)
-        btn = [[
-            InlineKeyboardButton("🗂 Click Here 🗂", url=FILMS_LINK)
-        ],[
-            InlineKeyboardButton('🤑 Buy Premium', url=f"https://t.me/{temp.U_NAME}?start=premium")
-            ]]
-        reply_markup=InlineKeyboardMarkup(btn)
-        if int(total) != 0:
-            await message.reply_text(f'<b><i>🤗 total <code>{total}</code> results found in this group 👇</i></b>\n\nor buy premium subscription', reply_markup=reply_markup)
-
+    if not AUTO_FILTER:
+        return await message.reply_text('⚠️ Auto filter was disabled!')
+    s = await message.reply(
+        f"<b><i>🔎 `{message.text}` searching...</i></b>",
+        reply_parameters=ReplyParameters(message_id=message.id)
+    )
+    await auto_filter(client, message, s)
             
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
