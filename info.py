@@ -103,7 +103,7 @@ if len(SECOND_FILES_DATABASE_URL) == 0:
 
 
 # Links
-SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/movies_updet')
+SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/Your_Movie_Link_8')
 UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/movies_updet')
 FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/Your_Movie_Link_8')
 TUTORIAL = environ.get("TUTORIAL", "https://t.me/how_to_downlod09/9")
@@ -171,7 +171,7 @@ EFFECT_IDS = [effect for effect in environ.get('EFFECT_IDS', '510484124575518058
 
 # for Premium 
 IS_PREMIUM = is_enabled('IS_PREMIUM', True)
-OWNER_USERNAME = environ.get("OWNER_USERNAME", "ABHISHEK_KUMAR")
+OWNER_USERNAME = environ.get("OWNER_USERNAME", "Abhikumar7799")
 PAYMENT_QR_CODE = "https://files.catbox.moe/zdqcba.jpg" # add your payment qr code link, like upi qr code or any crypto qr code link
 PAYMENT_ID = "ankij247@ibl"  # add your payment id like upi id or crypto address
 
